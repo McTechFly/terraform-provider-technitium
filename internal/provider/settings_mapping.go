@@ -334,12 +334,17 @@ func tfSettings2model(tf tfDNSSettings) model.DNSSettings {
 		DefaultSoaRecordTtl:          tf.DefaultSoaRecordTtl.ValueInt64(),
 		DefaultResponsiblePerson:     tf.DefaultResponsiblePerson.ValueString(),
 		UseSoaSerialDateScheme:       tf.UseSoaSerialDateScheme.ValueBool(),
-		MinSoaRefresh:                tf.MinSoaRefresh.ValueInt64(),
-		MinSoaRetry:                  tf.MinSoaRetry.ValueInt64(),
-		ZoneTransferAllowedNetworks:  tfListToStringSlice(tf.ZoneTransferAllowedNetworks),
-		NotifyAllowedNetworks:        tfListToStringSlice(tf.NotifyAllowedNetworks),
-		DnsAppsEnableAutomaticUpdate: tf.DnsAppsEnableAutomaticUpdate.ValueBool(),
+		MinSoaRefresh:               tf.MinSoaRefresh.ValueInt64(),
+		MinSoaRetry:                 tf.MinSoaRetry.ValueInt64(),
+		ZoneTransferAllowedNetworks: tfListToStringSlice(tf.ZoneTransferAllowedNetworks),
+		NotifyAllowedNetworks:       tfListToStringSlice(tf.NotifyAllowedNetworks),
+		DnsAppsEnableAutomaticUpdate: func() bool {
+			if tf.DnsAppsEnableAutomaticUpdate.IsNull() || tf.DnsAppsEnableAutomaticUpdate.IsUnknown() {
+				return false
+			}
 
+			return tf.DnsAppsEnableAutomaticUpdate.ValueBool()
+		}(),
 		// Network
 		PreferIPv6:          tf.PreferIPv6.ValueBool(),
 		EnableUdpSocketPool: tf.EnableUdpSocketPool.ValueBool(),
