@@ -749,6 +749,7 @@ func (r *SettingsResource) Delete(ctx context.Context, req resource.DeleteReques
 	// DNS settings cannot be "deleted" — removing from state is sufficient.
 	// The server will keep its current settings.
 	tflog.Info(ctx, "settings: delete (removing from state only)")
+	resp.Diagnostics.Append(resp.State.RemoveResource(ctx)...)
 }
 
 // preserveSensitiveSettings copies password fields from plan/state to the new state
