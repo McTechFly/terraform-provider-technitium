@@ -322,33 +322,51 @@ func modelSettings2tf(s model.DNSSettings) tfDNSSettings {
 	}
 }
 
+func tfStringValue(v types.String) string {
+	if v.IsNull() || v.IsUnknown() {
+		return ""
+	}
+
+	return v.ValueString()
+}
+
+func tfInt64Value(v types.Int64) int64 {
+	if v.IsNull() || v.IsUnknown() {
+		return 0
+	}
+
+	return v.ValueInt64()
+}
+
+func tfBoolValue(v types.Bool) bool {
+	if v.IsNull() || v.IsUnknown() {
+		return false
+	}
+
+	return v.ValueBool()
+}
+
 func tfSettings2model(tf tfDNSSettings) model.DNSSettings {
 	return model.DNSSettings{
 		// General
-		DnsServerDomain:              tf.DnsServerDomain.ValueString(),
+		DnsServerDomain:              tfStringValue(tf.DnsServerDomain),
 		DnsServerLocalEndPoints:      tfListToStringSlice(tf.DnsServerLocalEndPoints),
 		DnsServerIPv4SourceAddresses: tfListToStringSlice(tf.DnsServerIPv4SourceAddresses),
 		DnsServerIPv6SourceAddresses: tfListToStringSlice(tf.DnsServerIPv6SourceAddresses),
-		DefaultRecordTtl:             tf.DefaultRecordTtl.ValueInt64(),
-		DefaultNsRecordTtl:           tf.DefaultNsRecordTtl.ValueInt64(),
-		DefaultSoaRecordTtl:          tf.DefaultSoaRecordTtl.ValueInt64(),
-		DefaultResponsiblePerson:     tf.DefaultResponsiblePerson.ValueString(),
-		UseSoaSerialDateScheme:       tf.UseSoaSerialDateScheme.ValueBool(),
-		MinSoaRefresh:               tf.MinSoaRefresh.ValueInt64(),
-		MinSoaRetry:                 tf.MinSoaRetry.ValueInt64(),
-		ZoneTransferAllowedNetworks: tfListToStringSlice(tf.ZoneTransferAllowedNetworks),
-		NotifyAllowedNetworks:       tfListToStringSlice(tf.NotifyAllowedNetworks),
-		DnsAppsEnableAutomaticUpdate: func() bool {
-			if tf.DnsAppsEnableAutomaticUpdate.IsNull() || tf.DnsAppsEnableAutomaticUpdate.IsUnknown() {
-				return false
-			}
-
-			return tf.DnsAppsEnableAutomaticUpdate.ValueBool()
-		}(),
+		DefaultRecordTtl:             tfInt64Value(tf.DefaultRecordTtl),
+		DefaultNsRecordTtl:           tfInt64Value(tf.DefaultNsRecordTtl),
+		DefaultSoaRecordTtl:          tfInt64Value(tf.DefaultSoaRecordTtl),
+		DefaultResponsiblePerson:     tfStringValue(tf.DefaultResponsiblePerson),
+		UseSoaSerialDateScheme:       tfBoolValue(tf.UseSoaSerialDateScheme),
+		MinSoaRefresh:                tfInt64Value(tf.MinSoaRefresh),
+		MinSoaRetry:                  tfInt64Value(tf.MinSoaRetry),
+		ZoneTransferAllowedNetworks:  tfListToStringSlice(tf.ZoneTransferAllowedNetworks),
+		NotifyAllowedNetworks:        tfListToStringSlice(tf.NotifyAllowedNetworks),
+		DnsAppsEnableAutomaticUpdate: tfBoolValue(tf.DnsAppsEnableAutomaticUpdate),
 		// Network
-		PreferIPv6:          tf.PreferIPv6.ValueBool(),
-		EnableUdpSocketPool: tf.EnableUdpSocketPool.ValueBool(),
-		UdpPayloadSize:      tf.UdpPayloadSize.ValueInt64(),
+		PreferIPv6:          tfBoolValue(tf.PreferIPv6),
+		EnableUdpSocketPool: tfBoolValue(tf.EnableUdpSocketPool),
+		UdpPayloadSize:      tfInt64Value(tf.UdpPayloadSize),
 
 		// DNSSEC
 		DnssecValidation:                 tf.DnssecValidation.ValueBool(),
