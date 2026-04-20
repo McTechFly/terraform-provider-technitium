@@ -369,24 +369,24 @@ func tfSettings2model(tf tfDNSSettings) model.DNSSettings {
 		UdpPayloadSize:      tfInt64Value(tf.UdpPayloadSize),
 
 		// DNSSEC
-		DnssecValidation:                 tf.DnssecValidation.ValueBool(),
-		EDnsClientSubnet:                 tf.EDnsClientSubnet.ValueBool(),
-		EDnsClientSubnetIPv4PrefixLength: tf.EDnsClientSubnetIPv4PrefixLength.ValueInt64(),
-		EDnsClientSubnetIPv6PrefixLength: tf.EDnsClientSubnetIPv6PrefixLength.ValueInt64(),
-		EDnsClientSubnetIpv4Override:     tf.EDnsClientSubnetIpv4Override.ValueString(),
-		EDnsClientSubnetIpv6Override:     tf.EDnsClientSubnetIpv6Override.ValueString(),
+		DnssecValidation:                 tfBoolValue(tf.DnssecValidation),
+		EDnsClientSubnet:                 tfBoolValue(tf.EDnsClientSubnet),
+		EDnsClientSubnetIPv4PrefixLength: tfInt64Value(tf.EDnsClientSubnetIPv4PrefixLength),
+		EDnsClientSubnetIPv6PrefixLength: tfInt64Value(tf.EDnsClientSubnetIPv6PrefixLength),
+		EDnsClientSubnetIpv4Override:     tfStringValue(tf.EDnsClientSubnetIpv4Override),
+		EDnsClientSubnetIpv6Override:     tfStringValue(tf.EDnsClientSubnetIpv6Override),
 
 		// QPM Limits
-		QpmLimitSampleMinutes:           tf.QpmLimitSampleMinutes.ValueInt64(),
-		QpmLimitUdpTruncationPercentage: tf.QpmLimitUdpTruncationPercentage.ValueInt64(),
+		QpmLimitSampleMinutes:           tfInt64Value(tf.QpmLimitSampleMinutes),
+		QpmLimitUdpTruncationPercentage: tfInt64Value(tf.QpmLimitUdpTruncationPercentage),
 		QpmLimitBypassList:              tfListToStringSlice(tf.QpmLimitBypassList),
 
 		// Timeouts
-		ClientTimeout:                   tf.ClientTimeout.ValueInt64(),
-		TcpSendTimeout:                  tf.TcpSendTimeout.ValueInt64(),
-		TcpReceiveTimeout:               tf.TcpReceiveTimeout.ValueInt64(),
-		QuicIdleTimeout:                 tf.QuicIdleTimeout.ValueInt64(),
-		QuicMaxInboundStreams:           tf.QuicMaxInboundStreams.ValueInt64(),
+		ClientTimeout:                   tfInt64Value(tf.ClientTimeout),
+		TcpSendTimeout:                  tfInt64Value(tf.TcpSendTimeout),
+		TcpReceiveTimeout:               tfInt64Value(tf.TcpReceiveTimeout),
+		QuicIdleTimeout:                 tfInt64Value(tf.QuicIdleTimeout),
+		QuicMaxInboundStreams:           tfInt64Value(tf.QuicMaxInboundStreams),
 		ListenBacklog:                   tf.ListenBacklog.ValueInt64(),
 		MaxConcurrentResolutionsPerCore: tf.MaxConcurrentResolutionsPerCore.ValueInt64(),
 
